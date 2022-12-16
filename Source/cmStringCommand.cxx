@@ -703,14 +703,14 @@ bool HandleRepeatCommand(std::vector<std::string> const& args,
   if (args.size() != ArgPos::TOTAL_ARGS) {
     makefile.IssueMessage(MessageType::FATAL_ERROR,
                           "sub-command REPEAT requires three arguments.");
-    return true;
+    return false;
   }
 
   unsigned long times;
   if (!cmStrToULong(args[ArgPos::TIMES], &times)) {
     makefile.IssueMessage(MessageType::FATAL_ERROR,
                           "repeat count is not a positive number.");
-    return true;
+    return false;
   }
 
   const auto& stringValue = args[ArgPos::VALUE];

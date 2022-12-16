@@ -21,7 +21,7 @@ bool cmRemoveCommand(std::vector<std::string> const& args,
 
   // if there is no old value then return
   if (!cacheValue) {
-    return true;
+    return false;
   }
 
   // expand the variable
@@ -35,10 +35,10 @@ bool cmRemoveCommand(std::vector<std::string> const& args,
   // now create the new value
   std::string value;
   for (std::string const& varArgExpanded : varArgsExpanded) {
-    int found = 0;
+    bool found = false;
     for (std::string const& argExpanded : argsExpanded) {
       if (varArgExpanded == argExpanded) {
-        found = 1;
+        found = true;
         break;
       }
     }

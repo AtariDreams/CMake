@@ -17,7 +17,7 @@ bool cmContinueCommand(std::vector<std::string> const& args,
       "A CONTINUE command was found outside of a "
       "proper FOREACH or WHILE loop scope.");
     cmSystemTools::SetFatalErrorOccurred();
-    return true;
+    return false;
   }
 
   status.SetContinueInvoked();
@@ -28,7 +28,7 @@ bool cmContinueCommand(std::vector<std::string> const& args,
       "The CONTINUE command does not accept any "
       "arguments.");
     cmSystemTools::SetFatalErrorOccurred();
-    return true;
+    return false;
   }
 
   return true;

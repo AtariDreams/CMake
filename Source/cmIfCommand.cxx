@@ -189,14 +189,14 @@ bool cmIfCommand(std::vector<cmListFileArgument> const& args,
     if (status == MessageType::FATAL_ERROR) {
       makefile.IssueMessage(MessageType::FATAL_ERROR, err);
       cmSystemTools::SetFatalErrorOccurred();
-      return true;
+      return false;
     }
     makefile.IssueMessage(status, err);
   }
 
   {
     auto fb = cm::make_unique<cmIfFunctionBlocker>();
-    // if is isn't true block the commands
+    // if it isn't true block the commands
     fb->IsBlocking = !isTrue;
     if (isTrue) {
       fb->HasRun = true;

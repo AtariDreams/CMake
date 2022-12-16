@@ -308,13 +308,13 @@ bool HandleInMode(std::vector<std::string> const& args,
       if (doing == DoingZipLists) {
         makefile.IssueMessage(MessageType::FATAL_ERROR,
                               "ZIP_LISTS can not be used with LISTS or ITEMS");
-        return true;
+        return false;
       }
       if (varsCount != 1u) {
         makefile.IssueMessage(
           MessageType::FATAL_ERROR,
           "ITEMS or LISTS require exactly one iteration variable");
-        return true;
+        return false;
       }
       doing = DoingLists;
 
@@ -322,13 +322,13 @@ bool HandleInMode(std::vector<std::string> const& args,
       if (doing == DoingZipLists) {
         makefile.IssueMessage(MessageType::FATAL_ERROR,
                               "ZIP_LISTS can not be used with LISTS or ITEMS");
-        return true;
+        return false;
       }
       if (varsCount != 1u) {
         makefile.IssueMessage(
           MessageType::FATAL_ERROR,
           "ITEMS or LISTS require exactly one iteration variable");
-        return true;
+        return false;
       }
       doing = DoingItems;
 
@@ -336,7 +336,7 @@ bool HandleInMode(std::vector<std::string> const& args,
       if (doing != DoingNone) {
         makefile.IssueMessage(MessageType::FATAL_ERROR,
                               "ZIP_LISTS can not be used with LISTS or ITEMS");
-        return true;
+        return false;
       }
       doing = DoingZipLists;
       fb->SetZipLists();
@@ -353,7 +353,7 @@ bool HandleInMode(std::vector<std::string> const& args,
     } else {
       makefile.IssueMessage(MessageType::FATAL_ERROR,
                             cmStrCat("Unknown argument:\n", "  ", arg, "\n"));
-      return true;
+      return false;
     }
   }
 

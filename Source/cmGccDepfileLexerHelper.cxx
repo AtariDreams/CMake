@@ -86,7 +86,7 @@ void cmGccDepfileLexerHelper::newRuleOrDependency()
 
 void cmGccDepfileLexerHelper::addToCurrentPath(const char* s)
 {
-  if (this->Content.empty()) {
+  if (!s || this->Content.empty()) {
     return;
   }
   cmGccStyleDependency* dep = &this->Content.back();

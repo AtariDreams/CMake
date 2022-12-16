@@ -79,6 +79,8 @@ bool HandleSetMode(std::vector<std::string> const& args,
     policyStatus = cmPolicies::OLD;
   } else if (args[2] == "NEW") {
     policyStatus = cmPolicies::NEW;
+  } else if (args[2] == "WARN") {
+    policyStatus = cmPolicies::WARN;
   } else {
     status.SetError(
       cmStrCat("SET given unrecognized policy status \"", args[2], "\""));

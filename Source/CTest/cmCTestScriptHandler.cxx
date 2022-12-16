@@ -642,7 +642,7 @@ int cmCTestScriptHandler::PerformExtraUpdates()
       if (!res || retVal != 0) {
         cmSystemTools::Error(cmStrCat("Unable to perform extra updates:\n", eu,
                                       "\nWith output:\n", output));
-        return 0;
+        return 1;
       }
     }
   }
