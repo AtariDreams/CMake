@@ -231,8 +231,8 @@ cmMachOInternal::cmMachOInternal(const char* fname)
   }
 
   // Verify the binary identification.
-  if (!(magic == MH_CIGAM || magic == MH_MAGIC || magic == MH_CIGAM_64 ||
-        magic == MH_MAGIC_64 || magic == FAT_CIGAM || magic == FAT_MAGIC)) {
+  if (magic != MH_CIGAM && magic != MH_MAGIC && magic != MH_CIGAM_64 &&
+        magic != MH_MAGIC_64 && magic != FAT_CIGAM && magic != FAT_MAGIC) {
     this->ErrorMessage = "File does not have a valid Mach-O identification.";
     return;
   }

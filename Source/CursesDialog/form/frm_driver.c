@@ -2303,7 +2303,7 @@ static int FE_Insert_Character(FORM * form)
   FIELD *field = form->current;
   int result = E_REQUEST_DENIED;
 
-  if (Check_Char(field->type,(int)C_BLANK,(TypeArgument *)(field->arg)))
+  if (Check_Char(field->type,C_BLANK,(TypeArgument *)(field->arg)))
     {
       bool There_Is_Room = Is_There_Room_For_A_Char_In_Line(form);
 
@@ -2336,7 +2336,7 @@ static int FE_Insert_Line(FORM * form)
   FIELD *field = form->current;
   int result = E_REQUEST_DENIED;
 
-  if (Check_Char(field->type,(int)C_BLANK,(TypeArgument *)(field->arg)))
+  if (Check_Char(field->type,C_BLANK,(TypeArgument *)(field->arg)))
     {
       bool Maybe_Done = (form->currow!=(field->drows-1)) && 
                         Is_There_Room_For_A_Line(form);
@@ -3741,7 +3741,7 @@ int form_driver(FORM * form, int  c)
     } 
   else 
     {
-      if (!(c & (~(int)MAX_REGULAR_CHARACTER)) &&
+      if (!(c & (~MAX_REGULAR_CHARACTER)) &&
           isprint((unsigned char)c) &&                      
           Check_Char(form->current->type,c,
                      (TypeArgument *)(form->current->arg)))

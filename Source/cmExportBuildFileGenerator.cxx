@@ -481,7 +481,7 @@ std::string cmExportBuildFileGenerator::GetFileSetFiles(cmGeneratorTarget* gte,
       }
     }
 
-    if (!(contextSensitive && configs.size() != 1)) {
+    if (!contextSensitive || configs.size() == 1) {
       break;
     }
   }

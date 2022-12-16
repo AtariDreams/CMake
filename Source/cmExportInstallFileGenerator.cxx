@@ -675,7 +675,7 @@ std::string cmExportInstallFileGenerator::GetFileSetFiles(
       }
     }
 
-    if (!(contextSensitive && configs.size() != 1)) {
+    if (!contextSensitive || configs.size() == 1) {
       break;
     }
   }

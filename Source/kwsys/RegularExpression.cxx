@@ -706,7 +706,7 @@ char* RegExpCompile::regatom(int* flagp)
       char ender;
 
       regparse--;
-      len = int(strcspn(regparse, META));
+      len = static_cast<int>(strcspn(regparse, META));
       if (len <= 0) {
         // RAISE Error, SYM(RegularExpression), SYM(Internal_Error),
         printf("RegularExpression::compile(): Internal error.\n");
@@ -814,9 +814,9 @@ void RegExpCompile::regtail(char* p, const char* val)
   }
 
   if (OP(scan) == BACK)
-    offset = int(scan - val);
+    offset = static_cast<int>(scan - val);
   else
-    offset = int(val - scan);
+    offset = static_cast<int>(val - scan);
   *(scan + 1) = static_cast<char>((offset >> 8) & 0377);
   *(scan + 2) = static_cast<char>(offset & 0377);
 }
@@ -1147,7 +1147,7 @@ int RegExpFind::regrepeat(const char* p)
   opnd = OPERAND(p);
   switch (OP(p)) {
     case ANY:
-      count = int(strlen(scan));
+      count = static_cast<int>(strlen(scan));
       scan += count;
       break;
     case EXACTLY:

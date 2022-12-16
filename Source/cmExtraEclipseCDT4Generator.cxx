@@ -1025,7 +1025,7 @@ void cmExtraEclipseCDT4Generator::CreateCProjectFile() const
   xml.Attribute("version", "4.0.0");
 
   xml.StartElement("project");
-  xml.Attribute("id", std::string(lg->GetProjectName()) + ".null.1");
+  xml.Attribute("id", (lg->GetProjectName()) + ".null.1");
   xml.Attribute("name", lg->GetProjectName());
   xml.EndElement(); // project
 

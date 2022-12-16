@@ -151,7 +151,7 @@ void cmGlobalVisualStudio8Generator::Configure()
 bool cmGlobalVisualStudio8Generator::UseFolderProperty() const
 {
   // NOLINTNEXTLINE(bugprone-parent-virtual-call)
-  return IsExpressEdition() ? false : cmGlobalGenerator::UseFolderProperty();
+  return !IsExpressEdition() && cmGlobalGenerator::UseFolderProperty();
 }
 
 bool cmGlobalVisualStudio8Generator::AddCheckTarget()

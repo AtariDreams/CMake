@@ -1357,8 +1357,8 @@ void cmNinjaNormalTargetGenerator::WriteLinkStatement(
   cmValue flag = this->GetMakefile()->GetDefinition(cmakeLinkVar);
 
   bool const lang_supports_response =
-    !(this->TargetLinkLanguage(config) == "RC" ||
-      (this->TargetLinkLanguage(config) == "CUDA" && !flag));
+    !this->TargetLinkLanguage(config) == "RC" &&
+      (!this->TargetLinkLanguage(config) == "CUDA" || flag);
   int commandLineLengthLimit = -1;
   if (!lang_supports_response || !this->ForceResponseFile()) {
     commandLineLengthLimit =

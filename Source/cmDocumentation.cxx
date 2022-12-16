@@ -236,7 +236,7 @@ bool cmDocumentation::CheckOptions(int argc, const char* const* argv,
         (strcmp(argv[i], "/?") == 0) || (strcmp(argv[i], "-usage") == 0) ||
         (strcmp(argv[i], "-h") == 0) || (strcmp(argv[i], "-H") == 0)) {
       help.HelpType = cmDocumentation::Help;
-      i += int(get_opt_argument(i + 1, help.Argument));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Argument));
       help.Argument = cmSystemTools::LowerCase(help.Argument);
       // special case for single command
       if (!help.Argument.empty()) {
@@ -245,25 +245,25 @@ bool cmDocumentation::CheckOptions(int argc, const char* const* argv,
     } else if (strcmp(argv[i], "--help-properties") == 0) {
       help.HelpType = cmDocumentation::OneManual;
       help.Argument = "cmake-properties.7";
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-policies") == 0) {
       help.HelpType = cmDocumentation::OneManual;
       help.Argument = "cmake-policies.7";
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-variables") == 0) {
       help.HelpType = cmDocumentation::OneManual;
       help.Argument = "cmake-variables.7";
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-modules") == 0) {
       help.HelpType = cmDocumentation::OneManual;
       help.Argument = "cmake-modules.7";
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-custom-modules") == 0) {
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       cmSystemTools::Message(
         "Warning: --help-custom-modules no longer supported");
       if (help.Filename.empty()) {
@@ -277,7 +277,7 @@ bool cmDocumentation::CheckOptions(int argc, const char* const* argv,
     } else if (strcmp(argv[i], "--help-commands") == 0) {
       help.HelpType = cmDocumentation::OneManual;
       help.Argument = "cmake-commands.7";
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-compatcommands") == 0) {
       cmSystemTools::Message(
@@ -285,7 +285,7 @@ bool cmDocumentation::CheckOptions(int argc, const char* const* argv,
       return true;
     } else if (strcmp(argv[i], "--help-full") == 0) {
       help.HelpType = cmDocumentation::Full;
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-html") == 0) {
       cmSystemTools::Message("Warning: --help-html no longer supported");
@@ -295,53 +295,53 @@ bool cmDocumentation::CheckOptions(int argc, const char* const* argv,
       return true;
     } else if (strcmp(argv[i], "--help-command") == 0) {
       help.HelpType = cmDocumentation::OneCommand;
-      i += int(get_opt_argument(i + 1, help.Argument));
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Argument));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       help.Argument = cmSystemTools::LowerCase(help.Argument);
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-module") == 0) {
       help.HelpType = cmDocumentation::OneModule;
-      i += int(get_opt_argument(i + 1, help.Argument));
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Argument));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-property") == 0) {
       help.HelpType = cmDocumentation::OneProperty;
-      i += int(get_opt_argument(i + 1, help.Argument));
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Argument));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-policy") == 0) {
       help.HelpType = cmDocumentation::OnePolicy;
-      i += int(get_opt_argument(i + 1, help.Argument));
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Argument));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-variable") == 0) {
       help.HelpType = cmDocumentation::OneVariable;
-      i += int(get_opt_argument(i + 1, help.Argument));
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Argument));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-manual") == 0) {
       help.HelpType = cmDocumentation::OneManual;
-      i += int(get_opt_argument(i + 1, help.Argument));
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Argument));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
       this->WarnFormFromFilename(help, result);
     } else if (strcmp(argv[i], "--help-command-list") == 0) {
       help.HelpType = cmDocumentation::ListCommands;
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
     } else if (strcmp(argv[i], "--help-module-list") == 0) {
       help.HelpType = cmDocumentation::ListModules;
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
     } else if (strcmp(argv[i], "--help-property-list") == 0) {
       help.HelpType = cmDocumentation::ListProperties;
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
     } else if (strcmp(argv[i], "--help-variable-list") == 0) {
       help.HelpType = cmDocumentation::ListVariables;
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
     } else if (strcmp(argv[i], "--help-policy-list") == 0) {
       help.HelpType = cmDocumentation::ListPolicies;
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
     } else if (strcmp(argv[i], "--help-manual-list") == 0) {
       help.HelpType = cmDocumentation::ListManuals;
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
     } else if (strcmp(argv[i], "--copyright") == 0) {
       cmSystemTools::Message("Warning: --copyright no longer supported");
       return true;
@@ -349,7 +349,7 @@ bool cmDocumentation::CheckOptions(int argc, const char* const* argv,
                (strcmp(argv[i], "-version") == 0) ||
                (strcmp(argv[i], "/V") == 0)) {
       help.HelpType = cmDocumentation::Version;
-      i += int(get_opt_argument(i + 1, help.Filename));
+      i += static_cast<int>(get_opt_argument(i + 1, help.Filename));
     }
     if (help.HelpType != None) {
       // This is a help option.  See if there is a file name given.

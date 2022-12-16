@@ -436,7 +436,7 @@ double SystemTools::GetTime()
 #else
   struct timeval t;
   gettimeofday(&t, nullptr);
-  return 1.0 * double(t.tv_sec) + 0.000001 * double(t.tv_usec);
+  return 1.0 * static_cast<double>(t.tv_sec) + 0.000001 * static_cast<double>(t.tv_usec);
 #endif
 }
 
@@ -1898,7 +1898,7 @@ bool SystemTools::StringStartsWith(const char* str1, const char* str2)
     return false;
   }
   size_t len1 = strlen(str1), len2 = strlen(str2);
-  return len1 >= len2 && !strncmp(str1, str2, len2) ? true : false;
+  return len1 >= len2 && !strncmp(str1, str2, len2);
 }
 
 // Returns if string starts with another string
@@ -1908,7 +1908,7 @@ bool SystemTools::StringStartsWith(const std::string& str1, const char* str2)
     return false;
   }
   size_t len1 = str1.size(), len2 = strlen(str2);
-  return len1 >= len2 && !strncmp(str1.c_str(), str2, len2) ? true : false;
+  return len1 >= len2 && !strncmp(str1.c_str(), str2, len2);
 }
 
 // Returns if string ends with another string
@@ -1918,8 +1918,7 @@ bool SystemTools::StringEndsWith(const char* str1, const char* str2)
     return false;
   }
   size_t len1 = strlen(str1), len2 = strlen(str2);
-  return len1 >= len2 && !strncmp(str1 + (len1 - len2), str2, len2) ? true
-                                                                    : false;
+  return len1 >= len2 && !strncmp(str1 + (len1 - len2), str2, len2);
 }
 
 // Returns if string ends with another string
@@ -1929,9 +1928,7 @@ bool SystemTools::StringEndsWith(const std::string& str1, const char* str2)
     return false;
   }
   size_t len1 = str1.size(), len2 = strlen(str2);
-  return len1 >= len2 && !strncmp(str1.c_str() + (len1 - len2), str2, len2)
-    ? true
-    : false;
+  return len1 >= len2 && !strncmp(str1.c_str() + (len1 - len2), str2, len2);
 }
 
 // Returns a pointer to the last occurrence of str2 in str1
@@ -2036,7 +2033,7 @@ int SystemTools::EstimateFormatLength(const char* format, va_list ap)
     if (*cur++ == '%') {
       // Skip "%%" since it doesn't correspond to a va_arg.
       if (*cur != '%') {
-        while (!int(isalpha(*cur))) {
+        while (!(isalpha(*cur))) {
           ++cur;
         }
         switch (*cur) {
@@ -2579,7 +2576,7 @@ SystemTools::CopyStatus SystemTools::CopyFileAlways(
       destination_dir = real_destination;
       SystemTools::ConvertToUnixSlashes(real_destination);
       real_destination += '/';
-      std::string source_name = source;
+      const std::string& source_name = source;
       real_destination += SystemTools::GetFilenameName(source_name);
     } else {
       destination_dir = SystemTools::GetFilenamePath(destination);
@@ -3552,10 +3549,10 @@ static void SystemToolsAppendComponents(
       if (out_components.size() > 1 && out_components.back() != up) {
         out_components.resize(out_components.size() - 1);
       } else if (!out_components.empty() && out_components[0].empty()) {
-        out_components.emplace_back(std::move(*i));
+        out_components.emplace_back(*i);
       }
     } else if (!i->empty() && *i != cur) {
-      out_components.emplace_back(std::move(*i));
+      out_components.emplace_back(*i);
     }
   }
 }
@@ -3907,7 +3904,7 @@ bool SystemTools::ComparePath(const std::string& c1, const std::string& c2)
 bool SystemTools::Split(const std::string& str,
                         std::vector<std::string>& lines, char separator)
 {
-  std::string data(str);
+  const std::string& data(str);
   std::string::size_type lpos = 0;
   while (lpos < data.length()) {
     std::string::size_type rpos = data.find_first_of(separator, lpos);
@@ -4099,7 +4096,7 @@ bool SystemTools::FileHasSignature(const char* filename, const char* signature,
   char* buffer = new char[signature_len];
 
   if (fread(buffer, 1, signature_len, fp) == signature_len) {
-    res = (!strncmp(buffer, signature, signature_len) ? true : false);
+    res = (strncmp(buffer, signature, signature_len) == 0);
   }
 
   delete[] buffer;

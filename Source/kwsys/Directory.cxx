@@ -71,13 +71,13 @@ Directory::Directory()
 }
 
 Directory::Directory(Directory&& other)
-{
+ noexcept {
   this->Internal = other.Internal;
   other.Internal = nullptr;
 }
 
 Directory& Directory::operator=(Directory&& other)
-{
+ noexcept {
   std::swap(this->Internal, other.Internal);
   return *this;
 }

@@ -24,7 +24,7 @@ class cmExecutionStatus;
 class cmCTestReadCustomFilesCommand : public cmCTestCommand
 {
 public:
-  cmCTestReadCustomFilesCommand() {}
+  cmCTestReadCustomFilesCommand() = default;
 
   /**
    * This is a virtual constructor for the command.

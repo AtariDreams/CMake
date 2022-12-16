@@ -67,7 +67,7 @@ private:
   class cmCTestCompileErrorWarningRex
   {
   public:
-    cmCTestCompileErrorWarningRex() {}
+    cmCTestCompileErrorWarningRex() = default;
     int FileIndex;
     int LineIndex;
     cmsys::RegularExpression RegularExpression;

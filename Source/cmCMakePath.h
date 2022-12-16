@@ -498,7 +498,7 @@ public:
     return *this;
   }
 
-  iterator operator++(int)
+  const iterator operator++(int)
   {
     iterator it(*this);
     this->operator++();
@@ -513,7 +513,7 @@ public:
     return *this;
   }
 
-  iterator operator--(int)
+  const iterator operator--(int)
   {
     iterator it(*this);
     this->operator--();

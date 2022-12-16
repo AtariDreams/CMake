@@ -57,9 +57,8 @@ std::string const& cmStateSnapshot::GetExecutionListFile() const
 
 bool cmStateSnapshot::IsValid() const
 {
-  return this->State && this->Position.IsValid()
-    ? this->Position != this->State->SnapshotData.Root()
-    : false;
+  return this->State && this->Position.IsValid() &&
+    this->Position != this->State->SnapshotData.Root();
 }
 
 cmStateSnapshot cmStateSnapshot::GetBuildsystemDirectory() const

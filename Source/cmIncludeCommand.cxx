@@ -162,10 +162,8 @@ bool cmIncludeCommand(std::vector<std::string> const& args,
       status.SetError(cmStrCat("could not find requested file:\n  ", fname));
       return false;
     }
-    if (fileIsDirectory) {
-      status.SetError(cmStrCat("requested file is a directory:\n  ", fname));
-      return false;
-    }
+    status.SetError(cmStrCat("requested file is a directory:\n  ", fname));
+    return false;
   }
 
   bool readit =

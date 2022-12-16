@@ -24,7 +24,7 @@ class cmExecutionStatus;
 class cmCTestSleepCommand : public cmCTestCommand
 {
 public:
-  cmCTestSleepCommand() {}
+  cmCTestSleepCommand() = default;
 
   /**
    * This is a virtual constructor for the command.

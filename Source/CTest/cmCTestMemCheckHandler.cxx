@@ -95,18 +95,12 @@ public:
                  "No Category found in Bounds checker XML\n");
       return;
     }
-    while (ptr->ErrorCategory && cat) {
+    while (ptr->ErrorCategory) {
       if (strcmp(ptr->ErrorCategory, cat) == 0) {
         this->Errors.push_back(ptr->ErrorCode);
         return; // found it we are done
       }
       ptr++;
-    }
-    if (ptr->ErrorCategory) {
-      this->Errors.push_back(cmCTestMemCheckHandler::ABW); // do not know
-      cmCTestLog(this->CTest, ERROR_MESSAGE,
-                 "Found unknown Bounds Checker error " << ptr->ErrorCategory
-                                                       << std::endl);
     }
   }
   cmCTest* CTest;

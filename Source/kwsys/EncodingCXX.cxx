@@ -150,7 +150,7 @@ std::wstring Encoding::ToWide(const std::string& str)
     nullPos = str.find('\0', pos);
     if (nullPos != std::string::npos) {
       pos = nullPos + 1;
-      wstr += wchar_t('\0');
+      wstr += static_cast<wchar_t>('\0');
     }
   } while (nullPos != std::string::npos);
 #  endif
@@ -181,7 +181,7 @@ std::string Encoding::ToNarrow(const std::wstring& str)
     if (pos < str.size() && str.at(pos) != '\0') {
       nstr += ToNarrow(str.c_str() + pos);
     }
-    nullPos = str.find(wchar_t('\0'), pos);
+    nullPos = str.find(static_cast<wchar_t>('\0'), pos);
     if (nullPos != std::string::npos) {
       pos = nullPos + 1;
       nstr += '\0';

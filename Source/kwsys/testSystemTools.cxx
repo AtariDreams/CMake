@@ -892,27 +892,27 @@ static bool CheckIsSubDirectory()
 {
   bool res = true;
 
-  if (kwsys::SystemTools::IsSubDirectory("/foo", "/") == false) {
+  if (!kwsys::SystemTools::IsSubDirectory("/foo", "/")) {
     std::cerr << "Problem with IsSubDirectory (root - unix): " << std::endl;
     res = false;
   }
-  if (kwsys::SystemTools::IsSubDirectory("c:/foo", "c:/") == false) {
+  if (!kwsys::SystemTools::IsSubDirectory("c:/foo", "c:/")) {
     std::cerr << "Problem with IsSubDirectory (root - dos): " << std::endl;
     res = false;
   }
-  if (kwsys::SystemTools::IsSubDirectory("/foo/bar", "/foo") == false) {
+  if (!kwsys::SystemTools::IsSubDirectory("/foo/bar", "/foo")) {
     std::cerr << "Problem with IsSubDirectory (deep): " << std::endl;
     res = false;
   }
-  if (kwsys::SystemTools::IsSubDirectory("/foo", "/foo") == true) {
+  if (kwsys::SystemTools::IsSubDirectory("/foo", "/foo")) {
     std::cerr << "Problem with IsSubDirectory (identity): " << std::endl;
     res = false;
   }
-  if (kwsys::SystemTools::IsSubDirectory("/fooo", "/foo") == true) {
+  if (kwsys::SystemTools::IsSubDirectory("/fooo", "/foo")) {
     std::cerr << "Problem with IsSubDirectory (substring): " << std::endl;
     res = false;
   }
-  if (kwsys::SystemTools::IsSubDirectory("/foo/", "/foo") == true) {
+  if (kwsys::SystemTools::IsSubDirectory("/foo/", "/foo")) {
     std::cerr << "Problem with IsSubDirectory (prepended slash): "
               << std::endl;
     res = false;

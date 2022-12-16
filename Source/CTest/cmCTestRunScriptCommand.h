@@ -24,7 +24,7 @@ class cmExecutionStatus;
 class cmCTestRunScriptCommand : public cmCTestCommand
 {
 public:
-  cmCTestRunScriptCommand() {}
+  cmCTestRunScriptCommand() = default;
 
   /**
    * This is a virtual constructor for the command.

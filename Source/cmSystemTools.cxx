@@ -543,7 +543,7 @@ size_t cmSystemTools::CalculateCommandLineLengthLimit()
     // in Linux's binfmts.h
     static_cast<size_t>(sysconf(_SC_PAGESIZE) * 32);
 #else
-    size_t(0);
+    static_cast<size_t>(0);
 #endif
 
 #if defined(_SC_ARG_MAX)

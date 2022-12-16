@@ -57,9 +57,9 @@ static int _doLongPathTest()
 
     Directory testdir;
     // Set res to failure if the directory doesn't load
-    std::string errorMessage = "";
+    std::string errorMessage;
     res += !testdir.Load(testdirpath, &errorMessage);
-    if (errorMessage != "") {
+    if (!errorMessage.empty()) {
       std::cerr << "Failed to list directory: " << errorMessage << std::endl;
     }
     // Increment res failure if the directory appears empty
@@ -96,7 +96,7 @@ static int _nonExistentDirectoryTest()
 
   errorMessage = "foo";
   // Increment res failure if directory has files
-  res += (testdir.GetNumberOfFilesInDirectory(testdirpath, &errorMessage) > 0);
+  res += (cmsys::Directory::GetNumberOfFilesInDirectory(testdirpath, &errorMessage) > 0);
 #if !defined(_WIN32) || defined(__CYGWIN__)
   // Increment res failure if errorMessage is unmodified
   res += (errorMessage == "foo");

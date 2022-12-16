@@ -59,7 +59,7 @@ void cmDocumentationFormatter::PrintFormatted(std::ostream& os,
   const auto padding = std::string(this->TextIndent, ' ');
 
   for (std::size_t pos = 0u, eol = 0u; pos < text.size(); pos = eol) {
-    const auto current_idx = std::size_t(text[pos] == ' ');
+    const auto current_idx = static_cast<std::size_t>(text[pos] == ' ');
     // size_t(!bool(current_idx))
     const auto other_idx = current_idx ^ 1u;
 
@@ -130,14 +130,14 @@ void cmDocumentationFormatter::PrintColumn(std::ostream& os,
   for (const char *l = text.c_str(), *r = skipToSpace(text.c_str()); *l;
        l = skipSpaces(r), r = skipToSpace(l)) {
     // Does it fit on this line?
-    if (r - l < width - column - std::ptrdiff_t(newSentence)) {
+    if (r - l < width - column - static_cast<std::ptrdiff_t>(newSentence)) {
       // Word fits on this line.
       if (r > l) {
         if (column) {
           // Not first word on line.  Separate from the previous word
           // by a space, or two if this is a new sentence.
-          os << &("  "[std::size_t(!newSentence)]);
-          column += 1u + std::ptrdiff_t(newSentence);
+          os << &("  "[static_cast<std::size_t>(!newSentence)]);
+          column += 1u + static_cast<std::ptrdiff_t>(newSentence);
         } else if (!firstLine && this->TextIndent) {
           // First word on line.  Print indentation unless this is the
           // first line.
@@ -197,10 +197,10 @@ void cmDocumentationFormatter::PrintSection(
     if (!entry.Name.empty()) {
       this->TextIndent = TITLE_SIZE;
       os << std::setw(PREFIX_SIZE) << std::left << entry.CustomNamePrefix
-         << std::setw(int(std::max(NAME_SIZE, entry.Name.size())))
+         << std::setw(static_cast<int>(std::max(NAME_SIZE, entry.Name.size())))
          << entry.Name;
       if (entry.Name.size() > NAME_SIZE) {
-        os << '\n' << std::setw(int(this->TextIndent - PREFIX_SIZE)) << ' ';
+        os << '\n' << std::setw(static_cast<int>(this->TextIndent - PREFIX_SIZE)) << ' ';
       }
       os << "= ";
       this->PrintColumn(os, entry.Brief);

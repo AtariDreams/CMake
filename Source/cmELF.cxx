@@ -663,8 +663,8 @@ cmELF::cmELF(const char* fname)
   }
 
   // Verify the ELF identification.
-  if (!(ident[EI_MAG0] == ELFMAG0 && ident[EI_MAG1] == ELFMAG1 &&
-        ident[EI_MAG2] == ELFMAG2 && ident[EI_MAG3] == ELFMAG3)) {
+  if (ident[EI_MAG0] != ELFMAG0 || ident[EI_MAG1] != ELFMAG1 ||
+        ident[EI_MAG2] != ELFMAG2 || ident[EI_MAG3] != ELFMAG3) {
     this->ErrorMessage = "File does not have a valid ELF identification.";
     return;
   }

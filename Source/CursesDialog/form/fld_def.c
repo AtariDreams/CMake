@@ -49,7 +49,7 @@ static FIELD default_field = {
   NO_JUSTIFICATION,        /* just   */
   0,                       /* page   */
   0,                       /* index  */
-  (int)' ',                /* pad    */
+  ' ',                /* pad    */
   A_NORMAL,                /* fore   */
   A_NORMAL,                /* back   */
   ALL_FIELD_OPTS,          /* opts   */

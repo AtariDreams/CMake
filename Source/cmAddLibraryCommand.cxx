@@ -201,8 +201,8 @@ bool cmAddLibraryCommand(std::vector<std::string> const& args,
         aliasedType != cmStateEnums::MODULE_LIBRARY &&
         aliasedType != cmStateEnums::OBJECT_LIBRARY &&
         aliasedType != cmStateEnums::INTERFACE_LIBRARY &&
-        !(aliasedType == cmStateEnums::UNKNOWN_LIBRARY &&
-          aliasedTarget->IsImported())) {
+        (aliasedType != cmStateEnums::UNKNOWN_LIBRARY ||
+          !aliasedTarget->IsImported())) {
       status.SetError(cmStrCat("cannot create ALIAS target \"", libName,
                                "\" because target \"", aliasedName,
                                "\" is not a library."));

@@ -152,8 +152,8 @@ std::string Glob::PatternToRegex(const std::string& pattern,
     } else {
       // A single character matches itself.
       int ch = c;
-      if (!(('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') ||
-            ('0' <= ch && ch <= '9'))) {
+      if (('a' > ch || ch > 'z') && ('A' > ch || ch > 'Z') &&
+            ('0' > ch || ch > '9')) {
         // Escape the non-alphanumeric character.
         regex += "\\";
       }

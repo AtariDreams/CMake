@@ -145,9 +145,9 @@ bool cmSourceFileLocation::MatchesAmbiguousExtension(
 
   // Check if loc's name could possibly be extended to our name by
   // adding an extension.
-  if (!(this->Name.size() > loc.Name.size() &&
-        this->Name[loc.Name.size()] == '.' &&
-        cmHasPrefix(this->Name, loc.Name))) {
+  if (this->Name.size() <= loc.Name.size() ||
+        this->Name[loc.Name.size()] != '.' ||
+        !cmHasPrefix(this->Name, loc.Name)) {
     return false;
   }
 

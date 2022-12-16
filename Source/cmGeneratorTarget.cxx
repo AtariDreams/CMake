@@ -1923,9 +1923,9 @@ std::vector<BT<std::string>> cmGeneratorTarget::GetSourceFilePaths(
 
   // Determine if sources are context-dependent or not.
   if (!contextDependentDirectSources &&
-      !(contextDependentInterfaceSources && numFilesBefore < files.size()) &&
-      !(contextDependentObjects && numFilesBefore2 < files.size()) &&
-      !(contextDependentFileSets && numFilesBefore3 < files.size())) {
+      (!contextDependentInterfaceSources || numFilesBefore >= files.size()) &&
+      (!contextDependentObjects || numFilesBefore2 >= files.size()) &&
+      (!contextDependentFileSets || numFilesBefore3 >= files.size())) {
     this->SourcesAreContextDependent = Tribool::False;
   } else {
     this->SourcesAreContextDependent = Tribool::True;
@@ -2302,9 +2302,9 @@ bool cmGeneratorTarget::NeedRelinkBeforeInstall(
 bool cmGeneratorTarget::IsChrpathUsed(const std::string& config) const
 {
   // Only certain target types have an rpath.
-  if (!(this->GetType() == cmStateEnums::SHARED_LIBRARY ||
-        this->GetType() == cmStateEnums::MODULE_LIBRARY ||
-        this->GetType() == cmStateEnums::EXECUTABLE)) {
+  if (this->GetType() != cmStateEnums::SHARED_LIBRARY &&
+        this->GetType() != cmStateEnums::MODULE_LIBRARY &&
+        this->GetType() != cmStateEnums::EXECUTABLE) {
     return false;
   }
 

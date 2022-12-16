@@ -484,7 +484,7 @@ void cmExecuteProcessCommandFixText(std::vector<char>& output,
   while (in_index < output.size()) {
     char c = output[in_index++];
     if ((c != '\r' ||
-         !(in_index < output.size() && output[in_index] == '\n')) &&
+         in_index >= output.size() || output[in_index] != '\n') &&
         c != '\0') {
       output[out_index++] = c;
     }

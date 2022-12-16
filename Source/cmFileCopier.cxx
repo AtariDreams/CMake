@@ -647,10 +647,10 @@ bool cmFileCopier::InstallDirectory(const std::string& source,
 {
   // Inform the user about this directory installation.
   this->ReportCopy(destination, TypeDir,
-                   !( // Report "Up-to-date:" for existing directories,
+                   // Report "Up-to-date:" for existing directories,
                       // but not symlinks to them.
-                     cmSystemTools::FileIsDirectory(destination) &&
-                     !cmSystemTools::FileIsSymlink(destination)));
+                     !cmSystemTools::FileIsDirectory(destination) ||
+                     cmSystemTools::FileIsSymlink(destination));
 
   // check if default dir creation permissions were set
   mode_t default_dir_mode_v = 0;
@@ -707,8 +707,8 @@ bool cmFileCopier::InstallDirectory(const std::string& source,
   }
   unsigned long numFiles = static_cast<unsigned long>(dir.GetNumberOfFiles());
   for (unsigned long fileNum = 0; fileNum < numFiles; ++fileNum) {
-    if (!(strcmp(dir.GetFile(fileNum), ".") == 0 ||
-          strcmp(dir.GetFile(fileNum), "..") == 0)) {
+    if (strcmp(dir.GetFile(fileNum), ".") != 0 &&
+          strcmp(dir.GetFile(fileNum), "..") != 0) {
       std::string fromPath = cmStrCat(source, '/', dir.GetFile(fileNum));
       std::string toPath = cmStrCat(destination, '/', dir.GetFile(fileNum));
       if (!this->Install(fromPath, toPath)) {

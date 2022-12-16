@@ -493,9 +493,9 @@ void cmInstallTargetGenerator::AddInstallNamePatchRule(
   std::string const& toDestDirPath)
 {
   if (this->ImportLibrary ||
-      !(this->Target->GetType() == cmStateEnums::SHARED_LIBRARY ||
-        this->Target->GetType() == cmStateEnums::MODULE_LIBRARY ||
-        this->Target->GetType() == cmStateEnums::EXECUTABLE)) {
+      (this->Target->GetType() != cmStateEnums::SHARED_LIBRARY &&
+        this->Target->GetType() != cmStateEnums::MODULE_LIBRARY &&
+        this->Target->GetType() != cmStateEnums::EXECUTABLE)) {
     return;
   }
 

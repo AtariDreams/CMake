@@ -230,8 +230,6 @@ std::string cmExtraKateGenerator::GenerateFilesString(
     return "\"svn\": 1 ";
   }
 
-  s = cmStrCat(lg.GetSourceDirectory(), '/');
-
   std::set<std::string> files;
   std::string tmp;
   const auto& lgs = this->GlobalGenerator->GetLocalGenerators();

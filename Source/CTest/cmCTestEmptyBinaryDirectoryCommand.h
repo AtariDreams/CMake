@@ -24,7 +24,7 @@ class cmExecutionStatus;
 class cmCTestEmptyBinaryDirectoryCommand : public cmCTestCommand
 {
 public:
-  cmCTestEmptyBinaryDirectoryCommand() {}
+  cmCTestEmptyBinaryDirectoryCommand() = default;
 
   /**
    * This is a virtual constructor for the command.

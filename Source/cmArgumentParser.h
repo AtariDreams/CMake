@@ -328,7 +328,7 @@ public:
     Instance instance(this->Bindings, parseResultPtr, unparsedArguments,
                       &result);
     instance.Parse(args, pos);
-    return parseResultPtr ? static_cast<bool>(*parseResultPtr) : true;
+    return parseResultPtr == nullptr || static_cast<bool>(*parseResultPtr);
   }
 
   template <typename Range>

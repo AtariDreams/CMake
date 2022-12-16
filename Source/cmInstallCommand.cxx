@@ -241,7 +241,7 @@ void AddInstallRuntimeDependenciesGenerator(
       "_CMAKE_RPATH", configurations,
       cmInstallGenerator::SelectMessageLevel(helper.Makefile),
       runtimeDependenciesArgsRef.GetExcludeFromAll() &&
-        (apple ? frameworkArgs.GetExcludeFromAll() : true),
+        (!apple || frameworkArgs.GetExcludeFromAll()),
       helper.Makefile->GetBacktrace());
   helper.Makefile->AddInstallGenerator(
     std::move(getRuntimeDependenciesGenerator));

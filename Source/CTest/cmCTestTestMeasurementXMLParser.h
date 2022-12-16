@@ -8,7 +8,7 @@
 class cmCTestTestMeasurementXMLParser : public cmXMLParser
 {
 public:
-  cmCTestTestMeasurementXMLParser() {}
+  cmCTestTestMeasurementXMLParser() = default;
   std::string CharacterData;
   std::string ElementName;
   std::string MeasurementName;

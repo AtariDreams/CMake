@@ -774,7 +774,7 @@ bool HandleGlobImpl(std::vector<std::string> const& args, bool recurse,
                          foundFiles.end());
         cm->AddGlobCacheEntry(
           recurse, (recurse ? g.GetRecurseListDirs() : g.GetListDirs()),
-          (recurse ? g.GetRecurseThroughSymlinks() : false),
+          recurse && g.GetRecurseThroughSymlinks(),
           (g.GetRelative() ? g.GetRelative() : ""), expr, foundFiles, variable,
           status.GetMakefile().GetBacktrace());
       } else {

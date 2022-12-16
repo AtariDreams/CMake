@@ -527,10 +527,10 @@ cmComputeLinkInformation::GetSharedLibrariesLinked() const
 bool cmComputeLinkInformation::Compute()
 {
   // Skip targets that do not link.
-  if (!(this->Target->GetType() == cmStateEnums::EXECUTABLE ||
-        this->Target->GetType() == cmStateEnums::SHARED_LIBRARY ||
-        this->Target->GetType() == cmStateEnums::MODULE_LIBRARY ||
-        this->Target->GetType() == cmStateEnums::STATIC_LIBRARY)) {
+  if (this->Target->GetType() != cmStateEnums::EXECUTABLE &&
+        this->Target->GetType() != cmStateEnums::SHARED_LIBRARY &&
+        this->Target->GetType() != cmStateEnums::MODULE_LIBRARY &&
+        this->Target->GetType() != cmStateEnums::STATIC_LIBRARY) {
     return false;
   }
 

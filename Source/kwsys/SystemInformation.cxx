@@ -2234,10 +2234,8 @@ bool SystemInformationImplementation::RetrieveCPUCacheDetails()
 #endif
 
   // Return failure if we cannot detect either cache with this method.
-  return ((this->Features.L1CacheSize == -1) &&
-          (this->Features.L2CacheSize == -1))
-    ? false
-    : true;
+  return !((this->Features.L1CacheSize == -1) &&
+          (this->Features.L2CacheSize == -1));
 }
 
 /** */
@@ -2705,11 +2703,7 @@ bool SystemInformationImplementation::RetrieveCPUExtendedLevelSupport(
   int nLevelReturn = (cpuinfo[0] & 0x7FFFFFFF);
 
   // Check to see if the level provided is supported...
-  if (nLevelWanted > nLevelReturn) {
-    return false;
-  }
-
-  return true;
+  return nLevelWanted <= nLevelReturn;
 }
 
 /** */
