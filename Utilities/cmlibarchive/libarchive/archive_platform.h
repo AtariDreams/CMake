@@ -100,11 +100,6 @@
 #define	__RCSID(a)     struct _undefined_hack
 #endif
 
-/* Old glibc mbsnrtowcs fails assertions in our use case.  */
-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 1
-# undef HAVE_MBSNRTOWCS
-#endif
-
 /* Try to get standard C99-style integer type definitions. */
 #if HAVE_INTTYPES_H
 #include <inttypes.h>
@@ -115,44 +110,56 @@
 
 /* Borland warns about its own constants!  */
 #if defined(__BORLANDC__)
-# undef	UINT64_MAX
-# undef	UINT64_MIN
-# undef	INT64_MAX
-# undef	INT64_MIN
+# if HAVE_DECL_UINT64_MAX
+#  undef	UINT64_MAX
+#  undef	HAVE_DECL_UINT64_MAX
+# endif
+# if HAVE_DECL_UINT64_MIN
+#  undef	UINT64_MIN
+#  undef	HAVE_DECL_UINT64_MIN
+# endif
+# if HAVE_DECL_INT64_MAX
+#  undef	INT64_MAX
+#  undef	HAVE_DECL_INT64_MAX
+# endif
+# if HAVE_DECL_INT64_MIN
+#  undef	INT64_MIN
+#  undef	HAVE_DECL_INT64_MIN
+# endif
 #endif
 
 /* Some platforms lack the standard *_MAX definitions. */
-#ifndef SIZE_MAX
+#if !HAVE_DECL_SIZE_MAX
 #define	SIZE_MAX (~(size_t)0)
 #endif
-#ifndef SSIZE_MAX
+#if !HAVE_DECL_SSIZE_MAX
 #define	SSIZE_MAX ((ssize_t)(SIZE_MAX >> 1))
 #endif
-#ifndef UINT32_MAX
+#if !HAVE_DECL_UINT32_MAX
 #define	UINT32_MAX (~(uint32_t)0)
 #endif
-#ifndef INT32_MAX
+#if !HAVE_DECL_INT32_MAX
 #define	INT32_MAX ((int32_t)(UINT32_MAX >> 1))
 #endif
-#ifndef INT32_MIN
+#if !HAVE_DECL_INT32_MIN
 #define	INT32_MIN ((int32_t)(~INT32_MAX))
 #endif
-#ifndef UINT64_MAX
+#if !HAVE_DECL_UINT64_MAX
 #define	UINT64_MAX (~(uint64_t)0)
 #endif
-#ifndef INT64_MAX
+#if !HAVE_DECL_INT64_MAX
 #define	INT64_MAX ((int64_t)(UINT64_MAX >> 1))
 #endif
-#ifndef INT64_MIN
+#if !HAVE_DECL_INT64_MIN
 #define	INT64_MIN ((int64_t)(~INT64_MAX))
 #endif
-#ifndef UINTMAX_MAX
+#if !HAVE_DECL_UINTMAX_MAX
 #define	UINTMAX_MAX (~(uintmax_t)0)
 #endif
-#ifndef INTMAX_MAX
+#if !HAVE_DECL_INTMAX_MAX
 #define	INTMAX_MAX ((intmax_t)(UINTMAX_MAX >> 1))
 #endif
-#ifndef INTMAX_MIN
+#if !HAVE_DECL_INTMAX_MIN
 #define	INTMAX_MIN ((intmax_t)(~INTMAX_MAX))
 #endif
 

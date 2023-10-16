@@ -92,10 +92,6 @@ __FBSDID("$FreeBSD$");
 #include <sys/ioctl.h>
 #endif
 
-#ifdef __clang_analyzer__
-#include <assert.h>
-#endif
-
 #include "archive.h"
 #include "archive_string.h"
 #include "archive_entry.h"
@@ -746,10 +742,6 @@ _archive_read_data_block(struct archive *_a, const void **buff,
 			else if (errno == EPERM)
 				flags &= ~O_NOATIME;
 		}
-#ifdef __clang_analyzer__
-		/* Tolerate deadcode.DeadStores to avoid modifying upstream. */
-		(void)flags;
-#endif
 #endif
 		if (t->entry_fd < 0) {
 			archive_set_error(&a->archive, errno,
@@ -1678,6 +1670,11 @@ setup_current_filesystem(struct archive_read_disk *a)
 	else
 		t->current_filesystem->name_max = nm;
 #endif
+	if (t->current_filesystem->name_max == 0) {
+		archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
+		    "Cannot determine name_max");
+		return (ARCHIVE_FAILED);
+	}
 #endif /* USE_READDIR_R */
 	return (ARCHIVE_OK);
 }
@@ -1868,7 +1865,16 @@ setup_current_filesystem(struct archive_read_disk *a)
 
 #if defined(USE_READDIR_R)
 	/* Set maximum filename length. */
+#if defined(HAVE_STATVFS)
+	t->current_filesystem->name_max = svfs.f_namemax;
+#else
 	t->current_filesystem->name_max = sfs.f_namelen;
+#endif
+	if (t->current_filesystem->name_max == 0) {
+		archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
+		    "Cannot determine name_max");
+		return (ARCHIVE_FAILED);
+	}
 #endif
 	return (ARCHIVE_OK);
 }
@@ -1950,6 +1956,11 @@ setup_current_filesystem(struct archive_read_disk *a)
 #if defined(USE_READDIR_R)
 	/* Set maximum filename length. */
 	t->current_filesystem->name_max = svfs.f_namemax;
+	if (t->current_filesystem->name_max == 0) {
+		archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
+		    "Cannot determine name_max");
+		return (ARCHIVE_FAILED);
+	}
 #endif
 	return (ARCHIVE_OK);
 }
@@ -2004,6 +2015,11 @@ setup_current_filesystem(struct archive_read_disk *a)
 	else
 		t->current_filesystem->name_max = nm;
 #  endif /* _PC_NAME_MAX */
+	if (t->current_filesystem->name_max == 0) {
+		archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
+		    "Cannot determine name_max");
+		return (ARCHIVE_FAILED);
+	}
 #endif /* USE_READDIR_R */
 	return (ARCHIVE_OK);
 }
@@ -2355,9 +2371,6 @@ tree_pop(struct tree *t)
 	if (t->stack == t->current && t->current != NULL)
 		t->current = t->current->parent;
 	te = t->stack;
-	#ifdef __clang_analyzer__
-	assert(te);
-	#endif
 	t->stack = te->next;
 	t->dirname_length = te->dirname_length;
 	t->basename = t->path.s + t->dirname_length;
@@ -2554,7 +2567,11 @@ tree_current_lstat(struct tree *t)
 #else
 		if (tree_enter_working_dir(t) != 0)
 			return NULL;
+#ifdef HAVE_LSTAT
 		if (lstat(tree_current_access_path(t), &t->lst) != 0)
+#else
+		if (la_stat(tree_current_access_path(t), &t->lst) != 0)
+#endif
 #endif
 			return NULL;
 		t->flags |= hasLstat;

@@ -74,11 +74,6 @@
 #include <windows.h>
 //#define	EFTYPE 7
 
-#if defined(_MSC_VER)
-#pragma warning(push,1)
-#pragma warning(disable:4142)   /* benign redefinition of type */
-#pragma warning(disable:4761)   /* integral size mismatch in argument; conversion supplied */
-#endif
 #if defined(__BORLANDC__)
 #pragma warn -8068	/* Constant out of range in comparison. */
 #pragma warn -8072	/* Suspicious pointer arithmetic. */
@@ -190,7 +185,6 @@
 #define	S_ISDIR(m)	(((m) & S_IFMT) == S_IFDIR)	/* directory */
 #define	S_ISREG(m)	(((m) & S_IFMT) == S_IFREG)	/* regular file */
 #endif
-
 #define	S_ISLNK(m)  (((m) & S_IFMT) == S_IFLNK) /* Symbolic link */
 #define	S_ISSOCK(m) (((m) & S_IFMT) == S_IFSOCK) /* Socket */
 

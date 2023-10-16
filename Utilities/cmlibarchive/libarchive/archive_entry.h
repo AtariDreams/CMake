@@ -30,7 +30,7 @@
 #define	ARCHIVE_ENTRY_H_INCLUDED
 
 /* Note: Compiler will complain if this does not match archive.h! */
-#define	ARCHIVE_VERSION_NUMBER 3006002
+#define	ARCHIVE_VERSION_NUMBER 3007002
 
 /*
  * Note: archive_entry.h is for use outside of libarchive; the
@@ -129,8 +129,11 @@ typedef ssize_t la_ssize_t;
 # define __LA_DECL
 #endif
 
-/* CMake uses some deprecated APIs to build with old libarchive versions.  */
-#define __LA_DEPRECATED
+#if defined(__GNUC__) && __GNUC__ >= 3 && __GNUC_MINOR__ >= 1
+# define __LA_DEPRECATED __attribute__((deprecated))
+#else
+# define __LA_DEPRECATED
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -303,7 +306,7 @@ __LA_DECL int archive_entry_is_encrypted(struct archive_entry *);
 __LA_DECL void	archive_entry_set_atime(struct archive_entry *, time_t, long);
 __LA_DECL void  archive_entry_unset_atime(struct archive_entry *);
 #if defined(_WIN32) && !defined(__CYGWIN__)
-__LA_DECL void archive_entry_copy_bhfi(struct archive_entry *, struct _BY_HANDLE_FILE_INFORMATION *);
+__LA_DECL void archive_entry_copy_bhfi(struct archive_entry *, BY_HANDLE_FILE_INFORMATION *);
 #endif
 __LA_DECL void	archive_entry_set_birthtime(struct archive_entry *, time_t, long);
 __LA_DECL void  archive_entry_unset_birthtime(struct archive_entry *);

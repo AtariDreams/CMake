@@ -36,11 +36,8 @@ __FBSDID("$FreeBSD$");
 #include <string.h>
 #endif
 
-#ifdef __clang_analyzer__
-#include <assert.h>
-#endif
-
 #include "archive.h"
+#include "archive_entry.h"
 #include "archive_private.h"
 #include "archive_read_private.h"
 
@@ -61,12 +58,17 @@ struct uudecode {
 #define ST_UUEND	2
 #define ST_READ_BASE64	3
 #define ST_IGNORE	4
+	mode_t		mode;
+	int		mode_set;
+	char		*name;
 };
 
 static int	uudecode_bidder_bid(struct archive_read_filter_bidder *,
 		    struct archive_read_filter *filter);
 static int	uudecode_bidder_init(struct archive_read_filter *);
 
+static int	uudecode_read_header(struct archive_read_filter *,
+		    struct archive_entry *entry);
 static ssize_t	uudecode_filter_read(struct archive_read_filter *,
 		    const void **);
 static int	uudecode_filter_close(struct archive_read_filter *);
@@ -359,6 +361,7 @@ static const struct archive_read_filter_vtable
 uudecode_reader_vtable = {
 	.read = uudecode_filter_read,
 	.close = uudecode_filter_close,
+	.read_header = uudecode_read_header
 };
 
 static int
@@ -389,6 +392,8 @@ uudecode_bidder_init(struct archive_read_filter *self)
 	uudecode->in_allocated = IN_BUFF_SIZE;
 	uudecode->out_buff = out_buff;
 	uudecode->state = ST_FIND_HEAD;
+	uudecode->mode_set = 0;
+	uudecode->name = NULL;
 	self->vtable = &uudecode_reader_vtable;
 
 	return (ARCHIVE_OK);
@@ -434,6 +439,22 @@ ensure_in_buff_size(struct archive_read_filter *self,
 	return (ARCHIVE_OK);
 }
 
+static int
+uudecode_read_header(struct archive_read_filter *self, struct archive_entry *entry)
+{
+
+	struct uudecode *uudecode;
+	uudecode = (struct uudecode *)self->data;
+
+	if (uudecode->mode_set != 0)
+		archive_entry_set_mode(entry, S_IFREG | uudecode->mode);
+
+	if (uudecode->name != NULL)
+		archive_entry_set_pathname(entry, uudecode->name);
+
+	return (ARCHIVE_OK);
+}
+
 static ssize_t
 uudecode_filter_read(struct archive_read_filter *self, const void **buff)
 {
@@ -443,7 +464,7 @@ uudecode_filter_read(struct archive_read_filter *self, const void **buff)
 	ssize_t avail_in, ravail;
 	ssize_t used;
 	ssize_t total;
-	ssize_t len, llen, nl;
+	ssize_t len, llen, nl, namelen;
 
 	uudecode = (struct uudecode *)self->data;
 
@@ -471,9 +492,6 @@ read_more:
 		if (ensure_in_buff_size(self, uudecode,
 		    avail_in + uudecode->in_cnt) != ARCHIVE_OK)
 			return (ARCHIVE_FATAL);
-		#ifdef __clang_analyzer__
-		assert(d);
-		#endif
 		memcpy(uudecode->in_buff + uudecode->in_cnt,
 		    d, avail_in);
 		d = uudecode->in_buff;
@@ -551,6 +569,28 @@ read_more:
 					uudecode->state = ST_READ_UU;
 				else
 					uudecode->state = ST_READ_BASE64;
+				uudecode->mode = (mode_t)(
+				    ((int)(b[l] - '0') * 64) +
+				    ((int)(b[l+1] - '0') * 8) +
+				     (int)(b[l+2] - '0'));
+				uudecode->mode_set = 1;
+				namelen = len - nl - 4 - l;
+				if (namelen > 1) {
+					if (uudecode->name != NULL)
+						free(uudecode->name);
+					uudecode->name = malloc(namelen + 1);
+			                if (uudecode->name == NULL) {
+					archive_set_error(
+					    &self->archive->archive,
+					    ENOMEM,
+					    "Can't allocate data for uudecode");
+						return (ARCHIVE_FATAL);
+					}
+					strncpy(uudecode->name,
+					    (const char *)(b + l + 4),
+					    namelen);
+					uudecode->name[namelen] = '\0';
+				}
 			}
 			break;
 		case ST_READ_UU:
@@ -683,6 +723,7 @@ uudecode_filter_close(struct archive_read_filter *self)
 	uudecode = (struct uudecode *)self->data;
 	free(uudecode->in_buff);
 	free(uudecode->out_buff);
+	free(uudecode->name);
 	free(uudecode);
 
 	return (ARCHIVE_OK);

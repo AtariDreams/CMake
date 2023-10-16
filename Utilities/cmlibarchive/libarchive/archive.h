@@ -36,7 +36,7 @@
  * assert that ARCHIVE_VERSION_NUMBER >= 2012108.
  */
 /* Note: Compiler will complain if this does not match archive_entry.h! */
-#define	ARCHIVE_VERSION_NUMBER 3006002
+#define	ARCHIVE_VERSION_NUMBER 3007002
 
 #include <sys/stat.h>
 #include <stddef.h>  /* for wchar_t */
@@ -134,8 +134,11 @@ typedef ssize_t la_ssize_t;
 #define	__LA_PRINTF(fmtarg, firstvararg)	/* nothing */
 #endif
 
-/* CMake uses some deprecated APIs to build with old libarchive versions.  */
-#define __LA_DEPRECATED
+#if defined(__GNUC__) && __GNUC__ >= 3 && __GNUC_MINOR__ >= 1
+# define __LA_DEPRECATED __attribute__((deprecated))
+#else
+# define __LA_DEPRECATED
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -154,7 +157,7 @@ __LA_DECL int		archive_version_number(void);
 /*
  * Textual name/version of the library, useful for version displays.
  */
-#define	ARCHIVE_VERSION_ONLY_STRING "3.6.2"
+#define	ARCHIVE_VERSION_ONLY_STRING "3.7.2"
 #define	ARCHIVE_VERSION_STRING "libarchive " ARCHIVE_VERSION_ONLY_STRING
 __LA_DECL const char *	archive_version_string(void);
 

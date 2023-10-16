@@ -37,10 +37,6 @@ __FBSDID("$FreeBSD$");
 #include <wchar.h>
 #endif
 
-#ifdef __clang_analyzer__
-#include <assert.h>
-#endif
-
 #include "archive_acl_private.h"
 #include "archive_entry.h"
 #include "archive_private.h"
@@ -1213,9 +1209,6 @@ archive_acl_from_text_w(struct archive_acl *acl, const wchar_t *text,
 			 * to "user::rwx", etc. valid only for first field
 			 */
 			s = field[0].start;
-			#ifdef __clang_analyzer__
-			assert(s);
-			#endif
 			len = field[0].end - field[0].start;
 			if (*s == L'd' && (len == 1 || (len >= 7
 			    && wmemcmp((s + 1), L"efault", 6) == 0))) {
@@ -1699,9 +1692,6 @@ archive_acl_from_text_l(struct archive_acl *acl, const char *text,
 			 * to "user::rwx", etc. valid only for first field
 			 */
 			s = field[0].start;
-			#ifdef __clang_analyzer__
-			assert(s);
-			#endif
 			len = field[0].end - field[0].start;
 			if (*s == 'd' && (len == 1 || (len >= 7
 			    && memcmp((s + 1), "efault", 6) == 0))) {

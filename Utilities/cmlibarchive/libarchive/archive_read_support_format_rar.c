@@ -35,8 +35,6 @@
 #include <cm3p/zlib.h> /* crc32 */
 #endif
 
-#include <assert.h>
-
 #include "archive.h"
 #ifndef HAVE_ZLIB_H
 #include "archive_crc32.h"
@@ -1064,7 +1062,7 @@ archive_read_format_rar_read_header(struct archive_read *a,
 		      return (ARCHIVE_FATAL);
 	      }
 	      p = h;
-	      crc32_val = crc32(crc32_val, (const unsigned char *)p, to_read);
+	      crc32_val = crc32(crc32_val, (const unsigned char *)p, (unsigned int)to_read);
 	      __archive_read_consume(a, to_read);
 	      skip -= to_read;
       }
@@ -1832,12 +1830,8 @@ read_exttime(const char *p, struct rar *rar, const char *endp)
   struct tm *tm;
   time_t t;
   long nsec;
-#if defined(HAVE_LOCALTIME_R) || defined(HAVE__LOCALTIME64_S)
+#if defined(HAVE_LOCALTIME_R) || defined(HAVE_LOCALTIME_S)
   struct tm tmbuf;
-#endif
-#if defined(HAVE__LOCALTIME64_S)
-  errno_t terr;
-  __time64_t tmptime;
 #endif
 
   if (p + 2 > endp)
@@ -1870,15 +1864,10 @@ read_exttime(const char *p, struct rar *rar, const char *endp)
         rem = (((unsigned)(unsigned char)*p) << 16) | (rem >> 8);
         p++;
       }
-#if defined(HAVE_LOCALTIME_R)
+#if defined(HAVE_LOCALTIME_S)
+      tm = localtime_s(&tmbuf, &t) ? NULL : &tmbuf;
+#elif defined(HAVE_LOCALTIME_R)
       tm = localtime_r(&t, &tmbuf);
-#elif defined(HAVE__LOCALTIME64_S)
-      tmptime = t;
-      terr = _localtime64_s(&tmbuf, &tmptime);
-      if (terr)
-        tm = NULL;
-      else
-        tm = &tmbuf;
 #else
       tm = localtime(&t);
 #endif
@@ -3217,7 +3206,6 @@ parse_filter(struct archive_read *a, const uint8_t *bytes, uint16_t length, uint
     num = filters->lastfilternum;
 
   prog = filters->progs;
-  assert(num <= numprogs);
   for (i = 0; i < num; i++)
     prog = prog->next;
   if (prog)
@@ -3323,10 +3311,8 @@ create_filter(struct rar_program_code *prog, const uint8_t *globaldata, uint32_t
   filter->prog = prog;
   filter->globaldatalen = globaldatalen > PROGRAM_SYSTEM_GLOBAL_SIZE ? globaldatalen : PROGRAM_SYSTEM_GLOBAL_SIZE;
   filter->globaldata = calloc(1, filter->globaldatalen);
-  if (!filter->globaldata) {
-    free(filter);
+  if (!filter->globaldata)
     return NULL;
-  }
   if (globaldata)
     memcpy(filter->globaldata, globaldata, globaldatalen);
   if (registers)
@@ -3451,7 +3437,7 @@ compile_program(const uint8_t *bytes, size_t length)
   prog = calloc(1, sizeof(*prog));
   if (!prog)
     return NULL;
-  prog->fingerprint = crc32(0, bytes, length) | ((uint64_t)length << 32);
+  prog->fingerprint = crc32(0, bytes, (unsigned int)length) | ((uint64_t)length << 32);
 
   if (membr_bits(&br, 1))
   {
